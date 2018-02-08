@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<!-- Media streaming example
+  Reads an .mpd file created using mp4box and plays the file
+-->     
+<head>
+  <meta charset="utf-8" />
+  <title>Media streaming example</title>
+  <link href="styles.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    video {
+      max-width: 100%;
+    }
+  </style>
+</head>
+
+<body>     
+  <h1>Simple MSE Streaming player</h1>
+  <video autoplay controls loop></video>
+
+  <script>
+    const NUM_CHUNKS = 5;
+    var video = 'media/droid.webm';
+    var vidElement = document.querySelector('video');
+    var vidFile = (function(file) {
+      return fetch(file)
+        .then(function(response){
+          return response;
+        })
+    })(video);
+
+    if (window.MediaSource) {
+      var mediaSource = new MediaSource();
+      vidElement.src = URL.createObjectURL(mediaSource);
+      mediaSource.addEventListener('sourceopen', sourceOpen);
+    } else {
+      console.log("The Media Source Extensions API is not supported.")
+    }
+
+    function sourceOpen(e) {
+      var mediaSource = e.target;
+      var mimeCodec = 'video/webm; codecs="opus, vp9"';
+      var sourceBuffer = mediaSource.addSourceBuffer(mimeCodec);
+      vidFile
+        .then(function(response) {
+          return response.blob()
+        })
+        .then(function(fileBlob) {
+          var chunkSize = Math.ceil(fileBlob.size / NUM_CHUNKS);
+          var i = 0;
+
+          (function readChunk(i) {
+            var reader = new FileReader();
+
+            reader.addEventListener('load', function(e) {
+              if (i == NUM_CHUNKS) {
+                mediaSource.endOfStream();
+                URL.revokeObjectURL(vidElement.src);
+              } else {
+                sourceBuffer.appendBuffer(new Uint8Array(e.target.result));
+              }
+            })
+
+            var startByte = chunkSize * i;
+            var chunk = fileBlob.slice(startByte, startByte + chunkSize);
+
+            sourceBuffer.onupdateend = function() {
+              readChunk(++i);
+            }
+            reader.readAsArrayBuffer(chunk);
+          })(i);
+        })
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

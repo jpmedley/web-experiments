@@ -1,0 +1,25 @@
+{
+  "name": "mse",
+  "version": "1.0.0",
+  "description": "MSE Experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpmedley/mse.git"
+  },
+  "keywords": [
+    "MSE"
+  ],
+  "author": "Joseph Medley <jmedley@google.com> (https://developers.google.com/web)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpmedley/mse/issues"
+  },
+  "homepage": "https://github.com/jpmedley/mse#readme",
+  "dependencies": {
+    "whatwg-fetch": "^2.0.2"
+  }
+}
