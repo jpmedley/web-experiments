@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <body>
 
@@ -6,10 +6,10 @@
 <button id="getDevices">Get devices</button>
 <!-- <script src="usb.js"></script> -->
 <script type=module>
-'use strict'
-import * as usb from "./usb.js";
-navigator.usb.addEventListener('connect', usb.deviceAdded)
-document.querySelector('#getDevices').addEventListener('click', usb.enumerateDevices);
+  'use strict'
+  import * as usb from "./usb.js";
+  navigator.usb.addEventListener('connect', usb.deviceAdded)
+  document.querySelector('#getDevices').addEventListener('click', usb.enumerateDevices);
 </script>
 </body>
 </html>
