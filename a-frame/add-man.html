@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+<script src="https://google-ar.github.io/three.ar.js/dist/three.ar.js"></script>
+<script src="https://rawgit.com/chenzlabs/aframe-ar/827e9db/dist/aframe-ar.min.js"></script>
+<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/cfe5f316/dist/aframe-extras.js"></script>
+</head>
+<body>
+  <a-scene ar>
+    <a-assets>
+      <a-asset id="cesium-man" src="teapot.glb"></a-asset>
+    </a-assets>
+    <a-entity id="walker" gltf-model="#cesium-man" position="0 0 -5" scale="0.15 0.15 0.15" animation-mixer>
+    </a-entity>
+    <a-camera ar-raycaster raycaster cursor="fuse:false"> </a-camera>
+    <a-ring id="cursor" radius-inner="0.02" radius-outer="0.03" color="teal" position="0 -0.8 -5" rotation="-90 0 0">
+    </a-ring>
+  </a-scene>
+  <script type="text/javascript">
+    function onSceneLoaded() {
+      const raycaster = document.querySelector('[ar-raycaster]');
+      const cursor = document.querySelector('#cursor');
+      raycaster.addEventListener('raycaster-intersection', (event) => {
+        cursor.setAttribute('position', event.detail.intersections[0].point);
+      });
+      const walker = document.querySelector('#walker');
+      const { stringify } = AFRAME.utils.coordinates;
+
+      let firstTime = true;
+      raycaster.addEventListener('click', () => {
+        const target = raycaster.components.cursor.intersection.point;
+
+        if (firstTime) {
+          walker.setAttribute('position', target);
+          firstTime = false;
+        } else {
+          const animation = document.createElement('a-animation');
+          animation.setAttribute('attribute', 'position');
+          animation.setAttribute('to', stringify(target));
+          animation.setAttribute('dur', 5000);
+          animation.setAttribute('easing', 'linear');
+          walker.appendChild(animation);
+        }
+      });
+    }
+
+    const scene = document.querySelector('a-scene');
+    scene.addEventListener('loaded', onSceneLoaded);
+  </script>
+</body>
+</html>
