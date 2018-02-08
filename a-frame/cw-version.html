@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<title>test</title>
+<script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+<script src="https://google-ar.github.io/three.ar.js/dist/three.ar.js"></script>
+<script src="https://rawgit.com/chenzlabs/aframe-ar/827e9db/dist/aframe-ar.min.js"></script>
+<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/cfe5f316/dist/aframe-extras.js"></script>
+<script type="text/javascript">
+  AFRAME.registerComponent('shadow-material', {
+    init() {
+        this.material = new THREE.ShadowMaterial();
+        this.el.getOrCreateObject3D('mesh').material = this.material;
+        this.material.opacity = 0.3;
+    }
+  });
+</script>
+</head>
+<body>
+  <a-scene ar>
+
+<a-assets>
+	<a-asset id="cesium-man" src="teapot.glb"></a-asset>
+</a-assets>
+<a-entity id="walker">
+	<a-entity gltf-model="#cesium-man" scale="0.15 0.15 0.15" rotation="0 -90 0" animation-mixer>
+	</a-entity>
+	<a-plane width="0.5" height="0.5" position="0 0 0" rotation="-90 0 0"
+		color="white" shadow="receive: true" shadow-material></a-plane>
+</a-entity>
+<a-camera ar-raycaster raycaster cursor="fuse:false"></a-camera>
+<a-ring id="cursor" radius-inner="0.02" radius-outer="0.03"
+	color="teal" position="0 0 -1" rotation="-90 0 0">
+</a-ring>
+<!--
+<a-plane position="0 0 -1" rotation="-90 0 0" width="1" height="1" color="#7BC8A4"></a-plane>
+-->
+  </a-scene>
+  <script type="text/javascript">
+  function onSceneLoaded() {
+    const raycaster = document.querySelector('[ar-raycaster]');
+    const cursor = document.querySelector('#cursor');
+    raycaster.addEventListener('raycaster-intersection', (event) => {
+      cursor.setAttribute('position', event.detail.intersections[0].point);
+    });
+	const walker = document.querySelector('#walker');
+	const { stringify } = AFRAME.utils.coordinates;
+
+	let firstTime = true;
+	raycaster.addEventListener('click', () => {
+	  const target = raycaster.components.cursor.intersection.point;
+
+	  if (firstTime) {
+	    walker.setAttribute('position', target);
+	    firstTime = false;
+	  } else {
+	    const animation = document.createElement('a-animation');
+	    walker.object3D.lookAt(target);
+	    animation.setAttribute('attribute', 'position');
+	    animation.setAttribute('to', stringify(target));
+		const currentPosition = walker.object3D.position;
+		const distance = currentPosition.distanceTo(target);
+		animation.setAttribute('dur', distance * 7000);
+	    animation.setAttribute('easing', 'linear');
+	    walker.appendChild(animation);
+	  }
+	});
+  }
+  const scene = document.querySelector('a-scene');
+  scene.addEventListener('loaded', onSceneLoaded);
+
+
+</script>
+
+</body>
+</html>
