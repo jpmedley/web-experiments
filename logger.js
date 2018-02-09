@@ -1,17 +1,16 @@
 'use strict';
 
-class Logger {
+export default class {
   constructor(experimentName, options) {
     this.experiment = experimentName;
   }
 
   log(message) {
-    console.log("[" + this.experimentName + "] " + message);
+    console.log("[" + this.experiment + "] " + message);
   }
 
-  error(message) {
-    console.error("[" + ERROR + "][" + this.experimentName + "] " + message);
+  error(message, err) {
+    console.error("[" + ERROR + "][" + this.experiment + "] " + message);
+    console.error("       " + err);
   }
 }
-
-export default Logger
