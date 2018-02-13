@@ -30,13 +30,17 @@ function setUpXR() {
   });
 }
 
+function runNELoop() {
+
+}
+
 function getNESession() {
   sessionOptions = {
     exclusive: false,
     outputContext: vrCanvas.getContext('xrpresent')
   }
   if (xrDevice) {
-    xrDevice.requestSession(sessionOptions)
+    return xrDevice.requestSession(sessionOptions)
     .then(session => {
       logger.log("Session retrieved.");
       //Do something with the session.
@@ -52,7 +56,7 @@ function getSession() {
     exclusive: true,
     outputContext: vrCanvas.getContext('xrpresent')
   }
-  xrDevice.supportsSession(sessionOptions)
+  return xrDevice.supportsSession(sessionOptions)
   .then(session => {
     xrButton.style.display = "block";
   })
@@ -71,5 +75,6 @@ function _enterVR() {
 export {
   getNESession,
   getSession,
+  runNELoop,
   setUpXR
 }

@@ -1,14 +1,17 @@
 <!doctype html>
 <html>
 <body>
-<h1>Non-Exclusive Session</h1>
+<h1>Non-Exclusive Loop</h1>
 <canvas id="vr"></canvas>
 <script type="module">
   'use strict'
   import * as xr from "./webxr.js"
   xr.setUpXR()
   .then(() => {
-    xr.getNESession();
+    xr.getNESession()
+    .then(() => {
+      xr.runNELoop();
+    });
   });
 </script>
 </body>
