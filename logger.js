@@ -10,7 +10,7 @@ export default class {
   }
 
   error(message, err) {
-    console.error("[" + ERROR + "][" + this.experiment + "] " + message);
+    console.error("[" + this.experiment + "][ERROR] " + message);
     console.error("       " + err);
   }
 }

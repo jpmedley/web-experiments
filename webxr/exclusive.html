@@ -1,10 +1,23 @@
+<!doctype html>
+<html>
+<head>
+<style type="text/css">
+  #vr {
+    display: none;
+  }
+</style>
+</head>
+<body>
 <h1>Exclusive Session</h1>
+<button id="enterVR">Enter VR</button>
 <canvas id="vr"></canvas>
 <script type="module">
   'use strict'
   import * as xr from "./webxr.js"
-  xr.setUpXR();
-  // xr.getSession();
+  xr.setUpXR()
+  .then(() => {
+    xr.getSession();
+  });
 </script>
 </body>
 </html>
