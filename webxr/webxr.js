@@ -9,7 +9,6 @@ let xrButton;
 let sessionOptions;
 
 function setUpXR() {
-  // It appears that I need a head-mounted display to test this with.
   navigator.xr.addEventListener('devicechange', (e) => {
     logger.log(e.type + ", " + e.target);
   }, (err) => {
