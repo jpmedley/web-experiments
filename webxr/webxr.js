@@ -1,6 +1,6 @@
 'use strict';
 
-import Logger from "../logger.js";
+import Logger from "../js/logger.js";
 const logger = new Logger("WebXR");
 
 const vrCanvas = document.querySelector("#vr");
