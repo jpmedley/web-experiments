@@ -41,13 +41,13 @@ function getNESession() {
   }
   if (xrDevice) {
     return xrDevice.requestSession(sessionOptions)
-    .then(session => {
-      logger.log("Session retrieved.");
-      //Do something with the session.
-    })
-    .catch(err => {
-      logger.error("AR/VR session could not be created. ", err);
-    });
+    // .then(session => {
+    //   logger.log("Session retrieved.");
+    //   //Do something with the session.
+    // })
+    // .catch(err => {
+    //   logger.error("AR/VR session could not be created. ", err);
+    // });
   }
 }
 
@@ -65,6 +65,14 @@ function getSession() {
   })
 }
 
+function dumpSessionInfo(session) {
+  logger.log("Session retrieved.");
+  logger.log("\tExclusive: " + session.exclusive);
+  logger.log("\tPresentation contest: " + session.outputContext);
+  logger.log("\tDepth: " + session.depthNear + ", " + session.depthFar);
+  logger.log("\tBase layer: " + session.baseLayer);
+}
+
 function _enterVR() {
   xrDevice.requestSession(sessionOptions)
   .then(session => {
@@ -73,6 +81,7 @@ function _enterVR() {
 }
 
 export {
+  dumpSessionInfo,
   getNESession,
   getSession,
   runNELoop,

@@ -1,15 +1,24 @@
 <!doctype html>
 <html>
+<head>
+  <script src='cottontail/build/cottontail.debug.js'></script>
+</head>
 <body>
-<h1>Non-Exclusive Session</h1>
-<canvas id="vr"></canvas>
-<script type="module">
-  'use strict'
-  import * as xr from "./webxr.js"
-  xr.setUpXR()
-  .then(() => {
-    xr.getNESession();
-  });
-</script>
+  <h1>Non-Exclusive Session</h1>
+  <canvas id="vr"></canvas>
+  <script type="module">
+    'use strict'
+    // import * as cotton from "./cotton.js";
+    import * as xr from "./webxr.js"
+    import Logger from "../js/logger.js";
+    const logger = new Logger("WebXR");
+    xr.setUpXR()
+    .then(() => {
+      xr.getNESession()
+      .then((session) => {
+        xr.dumpSessionInfo(session);
+      });
+    });
+  </script>
 </body>
 </html>
