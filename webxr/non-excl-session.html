@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <script src='third-party/gl-matrix-min.js'></script>
   <script src='cottontail/build/cottontail.debug.js'></script>
 </head>
 <body>
@@ -8,17 +9,55 @@
   <canvas id="vr"></canvas>
   <script type="module">
     'use strict'
-    // import * as cotton from "./cotton.js";
     import * as xr from "./webxr.js"
     import Logger from "../js/logger.js";
     const logger = new Logger("WebXR");
+
+    let xrFrameOfRef = null;
+    let gl = null;
+    let renderer = null;
+    // let scene = new CubeSeaScene();
+    let scene = new Scene();
+    scene.addNode(new CubeSea());
+
     xr.setUpXR()
     .then(() => {
       xr.getNESession()
       .then((session) => {
-        xr.dumpSessionInfo(session);
+        gl = createWebGLContext({
+          compatibleXRDevice: session.device
+        });
+        renderer = new Renderer(gl);
+        scene.setRenderer(renderer);
+        session.baseLayer = new XRWebGLLayer(session, gl);
+
+        session.requestFrameOfReference('eyeLevel')
+        .then((frameOfRef) => {
+          xrFrameOfRef = frameOfRef;
+          session.requestAnimationFrame(onXRFrame)
+        })
       });
     });
+
+    function onXRFrame(t, frame) {
+      let session = frame.session;
+      let layer = new XRWebGLLayer(session, gl);
+      scene.startFrame();
+      session.requestAnimationFrame(onXRFrame);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, session.baseLayer.framebuffer);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      let pose = frame.getDevicePose(xrFrameOfRef);
+      if (pose) {
+        for (let view of frame.views) {
+          // let viewport = view.getViewport(session.baseLayer);
+          let viewport = layer.getViewport(session.baseLayer);
+          gl.viewport(viewport.x, viewport.y,
+                      viewport.width, viewport.height);
+          scene.draw(view.projectionMatrix, pose.getViewMatrix(view));
+        }
+      }
+      scene.endFrame();
+    }
   </script>
 </body>
 </html>
