@@ -5,8 +5,13 @@ export default class {
     this.experiment = experimentName;
   }
 
-  log(message) {
+  log(message, anObject) {
     console.log("[" + this.experiment + "] " + message);
+    if (anObject) {
+      for (let prop in anObject) {
+        console.log("\t" + prop + ": " + anObject[prop]);
+      }
+    }
   }
 
   error(message, err) {

@@ -8,6 +8,16 @@ let xrDevice;
 let xrButton;
 let sessionOptions;
 
+function _prepareCanvas() {
+  vrCanvas.width = window.visualViewport.width;
+  vrCanvas.height = window.visualViewport.height;
+
+  xrButton = document.querySelector("#enterVR");
+  if (xrButton) {
+    xrButton.addEventListener('click', _enterVR);
+  }
+}
+
 function setUpXR() {
   navigator.xr.addEventListener('devicechange', (e) => {
     logger.log(e.type + ", " + e.target);
@@ -15,15 +25,11 @@ function setUpXR() {
     logger.error("Something went wrong.", err);
   });
 
-  xrButton = document.querySelector("#enterVR");
-  if (xrButton) {
-    xrButton.addEventListener('click', _enterVR);
-  }
+  _prepareCanvas();
 
   return navigator.xr.requestDevice()
   .then(device => {
     xrDevice = device;
-    logger.log("Device found.");
   })
   .catch(err => {
     logger.error("No device was found. ", err);
@@ -36,18 +42,10 @@ function runNELoop() {
 
 function getNESession() {
   sessionOptions = {
-    exclusive: false,
     outputContext: vrCanvas.getContext('xrpresent')
   }
   if (xrDevice) {
     return xrDevice.requestSession(sessionOptions)
-    // .then(session => {
-    //   logger.log("Session retrieved.");
-    //   //Do something with the session.
-    // })
-    // .catch(err => {
-    //   logger.error("AR/VR session could not be created. ", err);
-    // });
   }
 }
 
@@ -65,14 +63,6 @@ function getSession() {
   })
 }
 
-function dumpSessionInfo(session) {
-  logger.log("Session retrieved.");
-  logger.log("\tExclusive: " + session.exclusive);
-  logger.log("\tPresentation contest: " + session.outputContext);
-  logger.log("\tDepth: " + session.depthNear + ", " + session.depthFar);
-  logger.log("\tBase layer: " + session.baseLayer);
-}
-
 function _enterVR() {
   xrDevice.requestSession(sessionOptions)
   .then(session => {
@@ -81,7 +71,6 @@ function _enterVR() {
 }
 
 export {
-  dumpSessionInfo,
   getNESession,
   getSession,
   runNELoop,
