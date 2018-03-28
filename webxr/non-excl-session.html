@@ -16,7 +16,6 @@
     let xrFrameOfRef = null;
     let gl = null;
     let renderer = null;
-    // let scene = new CubeSeaScene();
     let scene = new Scene();
     scene.addNode(new CubeSea());
 
@@ -35,22 +34,20 @@
         .then((frameOfRef) => {
           xrFrameOfRef = frameOfRef;
           session.requestAnimationFrame(onXRFrame)
-        })
+        });
       });
     });
 
     function onXRFrame(t, frame) {
+      let pose = frame.getDevicePose(xrFrameOfRef);
       let session = frame.session;
-      let layer = new XRWebGLLayer(session, gl);
       scene.startFrame();
       session.requestAnimationFrame(onXRFrame);
       gl.bindFramebuffer(gl.FRAMEBUFFER, session.baseLayer.framebuffer);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      let pose = frame.getDevicePose(xrFrameOfRef);
       if (pose) {
         for (let view of frame.views) {
-          // let viewport = view.getViewport(session.baseLayer);
-          let viewport = layer.getViewport(session.baseLayer);
+          let viewport = session.baseLayer.getViewport(view);
           gl.viewport(viewport.x, viewport.y,
                       viewport.width, viewport.height);
           scene.draw(view.projectionMatrix, pose.getViewMatrix(view));
