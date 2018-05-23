@@ -1,15 +1,22 @@
 <!doctype html>
 <html>
+<head>
+  <script type=module>
+    'use strict'
+    import * as usb from "./usb.js";
+    document.addEventListener('DOMContentLoaded', async () => {
+      navigator.usb.addEventListener('connect', usb.deviceAdded);
+      navigator.usb.addEventListener('disconnect', usb.deviceRemoved);
+      document.querySelector('#requestDevice').addEventListener('click', usb.requestDevice);
+      document.querySelector('#getDevices').addEventListener('click', usb.enumerateDevices);
+    })
+  </script>
+</head>
 <body>
 
 <h1>USB Tests</h1>
+<button id="requestDevice">RequetDevice</button>
 <button id="getDevices">Get devices</button>
 <!-- <script src="usb.js"></script> -->
-<script type=module>
-  'use strict'
-  import * as usb from "./usb.js";
-  navigator.usb.addEventListener('connect', usb.deviceAdded)
-  document.querySelector('#getDevices').addEventListener('click', usb.enumerateDevices);
-</script>
 </body>
 </html>
