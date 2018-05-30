@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <!-- <link rel="stylesheet" href="styles.css"> -->
   <script type=module>
     'use strict'
     import * as usb from "./usb.js";
@@ -10,17 +11,25 @@
       document.querySelector('#requestDevice').addEventListener('click', usb.requestDevice);
       document.querySelector('#getDevices').addEventListener('click', usb.enumerateDevices);
       document.querySelector('#claimInterface').addEventListener('click', usb.claimInterface);
+      document.querySelector('#inspectDeviceForm').addEventListener('click', usb.inspectDevice);
       document.querySelector('#inspectDevice').addEventListener('click', usb.inspectDevice);
+      document.querySelector('#setColor').addEventListener('click', usb.setColor)
     })
   </script>
 </head>
 <body>
 
 <h1>USB Tests</h1>
-<button id="requestDevice">Requet device</button><br/>
-<button id="getDevices">Get devices</button><br/>
-<button id="claimInterface">Claim interface</button><br/>
-<button id="inspectDevice">Inspect device</button><br/>
-<!-- <script src="usb.js"></script> -->
+<form>
+  <section>
+    <button id="requestDevice">Requet device</button><br/>
+    <button id="getDevices">Get devices</button><br/>
+    <button id="claimInterface">Claim interface</button><br/>
+    <button id="setColor">Set color</button><br/>
+  </section>
+<button id="inspectDeviceForm">Inspect device (form)</button><br/>
+</form>
+
+<button id="inspectDevice">Inspect device (free)</button><br/>
 </body>
 </html>
