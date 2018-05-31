@@ -12,6 +12,7 @@
       document.querySelector('#getDevices').addEventListener('click', usb.enumerateDevices);
       document.querySelector('#claimInterface').addEventListener('click', usb.claimInterface);
       document.querySelector('#inspectDeviceForm').addEventListener('click', usb.inspectDevice);
+      document.querySelector('#inspectDeviceFormButton').addEventListener('click', usb.inspectDevice);
       document.querySelector('#inspectDevice').addEventListener('click', usb.inspectDevice);
       document.querySelector('#setColor').addEventListener('click', usb.setColor)
     })
@@ -28,7 +29,7 @@
     <button id="setColor">Set color</button><br/>
   </section>
 <button id="inspectDeviceForm">Inspect device (form, default)</button><br/>
-<button id="inspectDeviceForm" type="button">Inspect device (form, button)</button><br/>
+<button id="inspectDeviceFormButton" type="button">Inspect device (form, button)</button><br/>
 </form>
 
 <button id="inspectDevice">Inspect device (free)</button><br/>
